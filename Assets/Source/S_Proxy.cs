@@ -8,8 +8,9 @@ public class S_Proxy : MonoBehaviourEx
 
     void Awake()
     {
-        addEventListener(MatrixEvent.EventsWithMatrix.REQUEST_UPADTE.ToString(), getMatrixFromClient);
-        addEventListener(EventsWithPieces.PiecesEvents.REQUEST_TO_SWAP.ToString(), swapPieces);
+        addEventListener(MatrixEvent.EventsWithMatrix.UPDATE_REQUEST.ToString(), getMatrixFromClient);
+        addEventListener(EventsWithPieces.PiecesEvents.SWAP_REQUEST.ToString(), swapPieces);
+        addEventListener(MatrixEvent.EventsWithMatrix.REACTION_REQUEST.ToString(), reaction_request);
     }
 
     private void getMatrixFromClient(BaseEvent cutchEvent)
@@ -25,14 +26,21 @@ public class S_Proxy : MonoBehaviourEx
         server.swap2Pieces(custEvent.x1, custEvent.y1, custEvent.x2, custEvent.y2);
     }
 
-    public void destroyPiece(HELPER.ITEMS[,] itemsNeedToDestroy)
+    public void reaction_answer(HELPER.ITEMS[,] itemsNeedToDestroy)
     {
-        //dispatchEvent(new MatrixEvent(MatrixEvent.EventsWithMatrix.DESTROY.ToString(), this.name, true, itemsNeedToDestroy));
+        dispatchEvent(new MatrixEvent(MatrixEvent.EventsWithMatrix.REACTION_ANSWER.ToString(), this.name, true, itemsNeedToDestroy));
+    }
+
+    private void reaction_request(BaseEvent cutchEvent)
+    {
+        print("getMatrixFromClient");
+        MatrixEvent custEvent = cutchEvent as MatrixEvent;
+        server.checkAllPieces();
     }
 
     public void sentAnswerToSwap(int x1, int y1, int x2, int y2)
     {
-        dispatchEvent(new EventsWithPieces(EventsWithPieces.PiecesEvents.ANSWER_TO_SWAP.ToString(), this.name, true, x1, y1, x2, y2));
+        dispatchEvent(new EventsWithPieces(EventsWithPieces.PiecesEvents.SWAP_ANSWER.ToString(), this.name, true, x1, y1, x2, y2));
     }
 
     public void sendStartMatrixToClient(HELPER.ITEMS [,] matrix)
@@ -42,13 +50,13 @@ public class S_Proxy : MonoBehaviourEx
 
     public void sendMatrixToClient(HELPER.ITEMS[,] matrix)
     {
-        dispatchEvent(new MatrixEvent(MatrixEvent.EventsWithMatrix.ANSWER_UPDATE.ToString(), this.name, true, matrix));
+        dispatchEvent(new MatrixEvent(MatrixEvent.EventsWithMatrix.UPDATE_ANSWER.ToString(), this.name, true, matrix));
     }
 
     public void OnDestroy()
     {
-        removeEventListener(MatrixEvent.EventsWithMatrix.REQUEST_UPADTE.ToString());
-        removeEventListener(EventsWithPieces.PiecesEvents.ANSWER_TO_SWAP.ToString());
+        removeEventListener(MatrixEvent.EventsWithMatrix.UPDATE_REQUEST.ToString());
+        removeEventListener(EventsWithPieces.PiecesEvents.SWAP_ANSWER.ToString());
     }
 
 }

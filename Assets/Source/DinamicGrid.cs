@@ -21,7 +21,7 @@ public class DinamicGrid : BaseGrid
     {
         if (pieceDOWN != null && pieceUP != null)
         {
-            proxy.sendRequestToSwap(pieceDOWN.x, pieceDOWN.y, pieceUP.x, pieceUP.y);
+            proxy.swap_request( pieceUP.x, pieceUP.y, pieceDOWN.x, pieceDOWN.y);
         }
     }
 
@@ -47,6 +47,9 @@ public class DinamicGrid : BaseGrid
                 yield return new WaitForSeconds(HELPER.FILLD_GREED_STEP);
             }
         }
+
+         //test
+
     }
     private void swap2Pieces(BasePiece piece1, BasePiece piece2, bool isAnimated = false)
     {
@@ -70,6 +73,9 @@ public class DinamicGrid : BaseGrid
             piece2.x = piece1X;
             piece2.y = piece1Y;
         }
+
+        checkMatrix(_pieces, server.matrixServer);
+        proxy.reaction_request(repotToServer(_pieces));
     }
 
 }

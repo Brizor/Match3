@@ -479,6 +479,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   proxy: {fileID: 161745144}
+  server: {fileID: 705310228}
   grid: {fileID: 946644882}
   gridBackground: {fileID: 1613956857}
   backgroundPiece: {fileID: 7336021651777544760, guid: 42a0542eeedcf874db6d6f3d834fedbe,

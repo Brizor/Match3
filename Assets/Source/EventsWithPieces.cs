@@ -8,8 +8,8 @@ public class EventsWithPieces : BaseEvent
 
     public enum PiecesEvents
     {
-        REQUEST_TO_SWAP,
-        ANSWER_TO_SWAP
+        SWAP_REQUEST,
+        SWAP_ANSWER
     }
 
     public EventsWithPieces(string type, string owner, bool isGlobal,int x1,int y1, int x2, int y2) : base(type, owner, isGlobal)

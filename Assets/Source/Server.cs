@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Server : MonoBehaviour
 {
-    HELPER.ITEMS[,] matrixServer = new HELPER.ITEMS[HELPER.MATRIX_LENGHT, HELPER.MATRIX_WIDTH];
+   public HELPER.ITEMS[,] matrixServer = new HELPER.ITEMS[HELPER.MATRIX_LENGHT, HELPER.MATRIX_WIDTH]; //test
 
     public S_Proxy proxy;
 
@@ -101,46 +101,48 @@ public class Server : MonoBehaviour
     {
         if (isAdjacent(x1, y1, x2, y2))
         {
+            HELPER.ITEMS temp = matrixServer[x1, y1];
             matrixServer[x1, y1] = matrixServer[x2, y2];
-            matrixServer[x2, y2] = matrixServer[x1, y1];
+            matrixServer[x2, y2] = temp;
             proxy.sentAnswerToSwap(x1, y1, x2, y2);
         }
-       // checkAllPieces();
+       // checkAllPieces();//
     }
-    /*public void checkAllPieces()
+    public void checkAllPieces()//
     {
-        HELPER.ITEMS[,] itemsNeedToDestroy= new HELPER.ITEMS[matrixServer.GetLength(0), matrixServer.GetLength(1)];
+        HELPER.ITEMS[,] itemsNeedToDestroy = new HELPER.ITEMS[matrixServer.GetLength(0), matrixServer.GetLength(1)];
         for (int i = 0; i < matrixServer.GetLength(0); i++)
+        {
             for (int j = 0; j < matrixServer.GetLength(1); j++)
             {
                 if (!matrixServer[i, j].Equals(HELPER.ITEMS.NULL))
                 {
-                    List<int[,]> result = checkMuch(i, j, matrixServer[i, j]);
+                    List<int[]> result = checkMuch(i, j, matrixServer[i, j]);
 
                     if (result.Count != 0)
                     {
-                        foreach (int[,] item in result)
+                        foreach (int[] item in result)
                         {
-                            int[,] pos = item;
-                            matrixServer[pos[0, 0], pos[1, 1]] = HELPER.ITEMS.NULL;
-                            itemsNeedToDestroy[pos[0, 0], pos[1, 1]] = HELPER.ITEMS.NULL;
-                            print(pos[0, 0] + " " + pos[1, 1]);
+                            int[] pos = item;
+                            matrixServer[pos[0], pos[1]] = HELPER.ITEMS.NULL;
+                            /*itemsNeedToDestroy[pos[0, 0], pos[1, 1]] = HELPER.ITEMS.NULL;
+                            print(pos[0, 0] + " " + pos[1, 1]);*/
+                            print("X = " + item[0] + " Y = " + item[1]);
                         }
-                        proxy.destroyPiece(itemsNeedToDestroy);
                     }
                 }
             }
-           //updateMatrix(matrixServer);
+        }
+        proxy.reaction_answer(matrixServer);
+            
+          // updateMatrix(matrixServer);//
     }
-    private List<int[,]> checkMuch(int x, int y, HELPER.ITEMS type)
+    private List<int[]> checkMuch(int x, int y, HELPER.ITEMS type)
     {
-        List<int[,]> results = new List<int[,]>();
-        List<int[,]> horisontalResults = new List<int[,]>();
-        List<int[,]> verticalResults = new List<int[,]>();
-        int[,] pos = new int[2, 2];
-
-        horisontalResults = checkHorisontal(x, y, type);
-        verticalResults = checkVertical(x, y, type);
+        List<int[]> results = new List<int[]>();
+        List<int[]> horisontalResults = checkHorisontal(x, y, type);
+        List<int[]> verticalResults = checkVertical(x, y, type);
+        int[] pos = new int[2];
 
         if (horisontalResults.Count > 1)
         {
@@ -154,25 +156,26 @@ public class Server : MonoBehaviour
 
         if (results.Count > 1)
         {
-            pos[0, 0] = x;
-            pos[1, 1] = y;
+            pos[0] = x;
+            pos[1] = y;
             results.Add(pos);
         }
 
         return results;
     }
 
-    private List<int[,]> checkVertical(int x, int y, HELPER.ITEMS type)
+    private List<int[]> checkVertical(int x, int y, HELPER.ITEMS type)
     {
-        List<int[,]> result = new List<int[,]>();
-        int[,] pos = new int[2, 2];
+        List<int[]> result = new List<int[]>();
+        int[] pos = new int[2];
+        pos[0] = x;
 
         for (int j = (y + 1); j < matrixServer.GetLength(1); j++)
         {
             if (!matrixServer[x, j].Equals(HELPER.ITEMS.NULL) && matrixServer[x, j].Equals(type))
             {
-                pos[0, 0] = x;
-                pos[1, 1] = j;
+
+                pos[1] = j;
                 result.Add(pos);
             }
             else
@@ -185,8 +188,7 @@ public class Server : MonoBehaviour
         {
             if (!matrixServer[x, j].Equals(HELPER.ITEMS.NULL) && matrixServer[x, j].Equals(type))
             {
-                pos[0, 0] = x;
-                pos[1, 1] = j;
+                pos[1] = j;
                 result.Add(pos);
             }
             else
@@ -199,17 +201,17 @@ public class Server : MonoBehaviour
     }
 
 
-    private List<int[,]> checkHorisontal(int x, int y, HELPER.ITEMS type)
+    private List<int[]> checkHorisontal(int x, int y, HELPER.ITEMS type)
     {
-        List<int[,]> result = new List<int[,]>();
-        int[,] pos = new int[2, 2];
+        List<int[]> result = new List<int[]>();
+        int[] pos = new int[2];
+        pos[1] = y;
 
         for (int i = x + 1; i < matrixServer.GetLength(0); i++)
         {
             if (!matrixServer[i, y].Equals(HELPER.ITEMS.NULL) && matrixServer[i, y].Equals(type))
             {
-                pos[0, 0] = i;
-                pos[1, 1] = y;
+                pos[0] = i;
                 result.Add(pos);
             }
             else
@@ -222,8 +224,7 @@ public class Server : MonoBehaviour
         {
             if (!matrixServer[i, y].Equals(HELPER.ITEMS.NULL) && matrixServer[i, y].Equals(type))
             {
-                pos[0, 0] = i;
-                pos[1, 1] = y;
+                pos[0] = i;
                 result.Add(pos);
             }
             else
@@ -233,5 +234,16 @@ public class Server : MonoBehaviour
         }
 
         return result;
-    }*/
+    }
+
+    private void checkAllPieases()
+    {
+        for(int i = 0; i < matrixServer.GetLength(0); i++)
+        {
+            for (int j = 0; j < matrixServer.GetLength(1); j++)
+            {
+
+            }
+        }
+    }
 }

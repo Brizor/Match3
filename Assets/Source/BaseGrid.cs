@@ -5,6 +5,7 @@ using UnityEngine;
 public class BaseGrid : MonoBehaviour
 {
     public C_Proxy proxy;
+    public Server server;
 
     public Transform grid;
     public Transform gridBackground;
@@ -107,20 +108,20 @@ public class BaseGrid : MonoBehaviour
         //  movePiecesToBottom();
     }
 
-  /*  public void reaction(HELPER.ITEMS[,] res)
+  public void reaction(HELPER.ITEMS[,] itemsNeedToDestroy)//
     {
-        for (int i = 0; i < res.GetLength(0); i++)
+        for (int i = 0; i < itemsNeedToDestroy.GetLength(0); i++)
         {
-            for (int j = 0; j < res.GetLength(1); j++)
+            for (int j = 0; j < itemsNeedToDestroy.GetLength(1); j++)
             {
-                if (res[i, j].Equals(HELPER.ITEMS.NULL))
+                if (itemsNeedToDestroy[i, j].Equals(HELPER.ITEMS.NULL))
                 {
                     destroyPiece(i, j);
                 }
             }
         }
-        movePiecesToBottom();
-    }*/
+       // movePiecesToBottom();
+    }
 
     public HELPER.ITEMS[,] repotToServer(BasePiece[,] piece)
     {
@@ -190,6 +191,22 @@ public class BaseGrid : MonoBehaviour
             }
             movePiecesToBottom();
             yield return new WaitForSeconds(HELPER.PIECE_OFFCET);
+        }
+    }
+
+    public void checkMatrix(BasePiece[,] matrixClient, HELPER.ITEMS[,] matrixServer) //test
+    {
+        for (int i = 0; i < matrixClient.GetLength(0); i++)
+        {
+            for (int j = 0; j < matrixClient.GetLength(1); j++)
+            {
+                if (!matrixClient[i, j]._type.Equals(matrixServer[i,j]))
+                {
+                    print("Matrixs are not similar");
+                    print(i + " " + j);
+                    print(matrixServer[i, j].ToString() + " " + matrixClient[i, j]._type.ToString());
+                }
+            }
         }
     }
 
