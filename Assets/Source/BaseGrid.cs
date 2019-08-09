@@ -63,6 +63,7 @@ public class BaseGrid : MonoBehaviour
     private BasePiece createGamePiece(int x, int y, HELPER.ITEMS type, int outSide = 0)
     {
         GameObject newPiece = Instantiate(_piecePrefabsDict[type], getGridPosition(x, y + outSide), Quaternion.identity);
+        newPiece.name = "Piece(" + x + "," + y + ")";
         newPiece.GetComponent<SpriteRenderer>().sprite = getPieceView(type);
         newPiece.transform.parent = grid;
 
@@ -105,10 +106,9 @@ public class BaseGrid : MonoBehaviour
     {
         Destroy(_pieces[x, y].gameObject);
         _pieces[x, y] = null;
-        //  movePiecesToBottom();
     }
 
-  public void reaction(HELPER.ITEMS[,] itemsNeedToDestroy)//
+    public void reaction(HELPER.ITEMS[,] itemsNeedToDestroy)
     {
         for (int i = 0; i < itemsNeedToDestroy.GetLength(0); i++)
         {
@@ -120,7 +120,7 @@ public class BaseGrid : MonoBehaviour
                 }
             }
         }
-       // movePiecesToBottom();
+        movePiecesToBottom2();
     }
 
     public HELPER.ITEMS[,] repotToServer(BasePiece[,] piece)
@@ -171,6 +171,41 @@ public class BaseGrid : MonoBehaviour
         }
     }
 
+    public void movePiecesToBottom2()
+    {
+        bool needToMove;
+        do
+        {
+            needToMove = false;
+            BasePiece currentItem;
+            BasePiece upperItem;
+            int upperItemJ;
+            for (int j = _pieces.GetLength(1) - 1; j > 0; j--)
+            {
+                upperItemJ = j - 1;
+                for (int i = 0; i < _pieces.GetLength(0); i++)
+                {
+                    if (_pieces[i, upperItemJ] != null && _pieces[i, j] is null)
+                    {
+                        currentItem = _pieces[i, j];
+                        upperItem = _pieces[i, upperItemJ];
+
+                        if (upperItem.isMovable())
+                        {
+                            upperItem.moveComponent.move(i, j, HELPER.FILLD_GREED_STEP);
+                            upperItem.x = i;
+                            upperItem.y = j;
+                            _pieces[i, j] = upperItem;
+                            _pieces[i, upperItemJ] = null;
+                            needToMove = true;
+                        }
+                    }
+                }
+            }
+
+        } while (needToMove);
+    }
+
     public void updateGrid(HELPER.ITEMS[,] matrix)
     {
         addedMatrix = matrix;
@@ -200,7 +235,7 @@ public class BaseGrid : MonoBehaviour
         {
             for (int j = 0; j < matrixClient.GetLength(1); j++)
             {
-                if (!matrixClient[i, j]._type.Equals(matrixServer[i,j]))
+                if (!matrixClient[i, j]._type.Equals(matrixServer[i, j]))
                 {
                     print("Matrixs are not similar");
                     print(i + " " + j);

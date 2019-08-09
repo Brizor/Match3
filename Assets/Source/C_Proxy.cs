@@ -14,20 +14,10 @@ public class C_Proxy : MonoBehaviourEx
         addEventListener(EventsWithPieces.PiecesEvents.SWAP_ANSWER.ToString(), swap_answer);
     }
 
-    private void reaction_answer(BaseEvent cutchEvent)//
+    private void reaction_answer(BaseEvent cutchEvent)
     {
         MatrixEvent custEvent = cutchEvent as MatrixEvent;
-        for (int i = 0; i < custEvent.matrix.GetLength(0); i++)
-        {
-            for (int j = 0; j < custEvent.matrix.GetLength(1); j++)
-            {
-                if (custEvent.matrix[i, j].Equals(HELPER.ITEMS.NULL))
-                {
-                   // print("X = " + i + " Y = " + j);
-                }
-            }
-        }
-        //client.reaction(custEvent.matrix);
+        client.reaction(custEvent.matrix);
     }
 
     public void reaction_request(HELPER.ITEMS[,] matrix)

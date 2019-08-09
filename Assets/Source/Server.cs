@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Server : MonoBehaviour
 {
-   public HELPER.ITEMS[,] matrixServer = new HELPER.ITEMS[HELPER.MATRIX_LENGHT, HELPER.MATRIX_WIDTH]; //test
+    public HELPER.ITEMS[,] matrixServer = new HELPER.ITEMS[HELPER.MATRIX_LENGHT, HELPER.MATRIX_WIDTH]; //test
 
     public S_Proxy proxy;
 
@@ -106,9 +106,8 @@ public class Server : MonoBehaviour
             matrixServer[x2, y2] = temp;
             proxy.sentAnswerToSwap(x1, y1, x2, y2);
         }
-       // checkAllPieces();//
     }
-    public void checkAllPieces()//
+    public void checkAllPieces()
     {
         HELPER.ITEMS[,] itemsNeedToDestroy = new HELPER.ITEMS[matrixServer.GetLength(0), matrixServer.GetLength(1)];
         for (int i = 0; i < matrixServer.GetLength(0); i++)
@@ -125,8 +124,6 @@ public class Server : MonoBehaviour
                         {
                             int[] pos = item;
                             matrixServer[pos[0], pos[1]] = HELPER.ITEMS.NULL;
-                            /*itemsNeedToDestroy[pos[0, 0], pos[1, 1]] = HELPER.ITEMS.NULL;
-                            print(pos[0, 0] + " " + pos[1, 1]);*/
                             print("X = " + item[0] + " Y = " + item[1]);
                         }
                     }
@@ -134,8 +131,8 @@ public class Server : MonoBehaviour
             }
         }
         proxy.reaction_answer(matrixServer);
-            
-          // updateMatrix(matrixServer);//
+
+        // updateMatrix(matrixServer);//
     }
     private List<int[]> checkMuch(int x, int y, HELPER.ITEMS type)
     {
@@ -167,14 +164,15 @@ public class Server : MonoBehaviour
     private List<int[]> checkVertical(int x, int y, HELPER.ITEMS type)
     {
         List<int[]> result = new List<int[]>();
-        int[] pos = new int[2];
-        pos[0] = x;
+        
+        
 
         for (int j = (y + 1); j < matrixServer.GetLength(1); j++)
         {
             if (!matrixServer[x, j].Equals(HELPER.ITEMS.NULL) && matrixServer[x, j].Equals(type))
             {
-
+                int[] pos = new int[2];
+                pos[0] = x;
                 pos[1] = j;
                 result.Add(pos);
             }
@@ -188,6 +186,8 @@ public class Server : MonoBehaviour
         {
             if (!matrixServer[x, j].Equals(HELPER.ITEMS.NULL) && matrixServer[x, j].Equals(type))
             {
+                int[] pos = new int[2];
+                pos[0] = x;
                 pos[1] = j;
                 result.Add(pos);
             }
@@ -204,13 +204,14 @@ public class Server : MonoBehaviour
     private List<int[]> checkHorisontal(int x, int y, HELPER.ITEMS type)
     {
         List<int[]> result = new List<int[]>();
-        int[] pos = new int[2];
-        pos[1] = y;
+        
 
         for (int i = x + 1; i < matrixServer.GetLength(0); i++)
         {
             if (!matrixServer[i, y].Equals(HELPER.ITEMS.NULL) && matrixServer[i, y].Equals(type))
             {
+                int[] pos = new int[2];
+                pos[1] = y;
                 pos[0] = i;
                 result.Add(pos);
             }
@@ -224,6 +225,8 @@ public class Server : MonoBehaviour
         {
             if (!matrixServer[i, y].Equals(HELPER.ITEMS.NULL) && matrixServer[i, y].Equals(type))
             {
+                int[] pos = new int[2];
+                pos[1] = y;
                 pos[0] = i;
                 result.Add(pos);
             }
@@ -234,16 +237,5 @@ public class Server : MonoBehaviour
         }
 
         return result;
-    }
-
-    private void checkAllPieases()
-    {
-        for(int i = 0; i < matrixServer.GetLength(0); i++)
-        {
-            for (int j = 0; j < matrixServer.GetLength(1); j++)
-            {
-
-            }
-        }
     }
 }

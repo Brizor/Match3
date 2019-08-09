@@ -73,8 +73,6 @@ public class DinamicGrid : BaseGrid
             piece2.x = piece1X;
             piece2.y = piece1Y;
         }
-
-        checkMatrix(_pieces, server.matrixServer);
         proxy.reaction_request(repotToServer(_pieces));
     }
 
